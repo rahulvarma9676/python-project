@@ -1,0 +1,164 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from scipy.stats import zscore
+
+# Load dataset
+df = pd.read_csv("C:\\Users\\rahul\\Downloads\\serious-injury-outcome-indicators-2000-2023.csv")
+
+# Info about the dataset
+print("Dataset Info:")
+print(df.info())
+print("\nFirst 5 Rows:")
+print(df.head())
+
+# Check for missing values
+print("\nMissing Values:\n", df.isnull().sum())
+
+# -------------------------------
+# Statistical Summary
+numeric_cols = ['Data_value', 'Lower_CI', 'Upper_CI']
+print("\nStatistical Summary:\n", df[numeric_cols].describe())
+
+# -------------------------------
+# Outlier Detection using Z-Score
+z_scores = np.abs(zscore(df[numeric_cols]))
+outliers = (z_scores > 3)
+print("\nOutliers (Z-Score > 3):\n", outliers.sum())
+
+# -------------------------------
+# Correlation Heatmap
+plt.figure(figsize=(8, 6))
+sns.heatmap(df[numeric_cols].corr(), annot=True, cmap='coolwarm')
+plt.title('Correlation Heatmap')
+plt.show()
+
+# -------------------------------
+# Boxplot for Outliers
+plt.figure(figsize=(8, 6))
+sns.boxplot(data=df[numeric_cols])
+plt.title('Boxplot - Outliers')
+plt.show()
+
+# -------------------------------
+# Line Chart of Data over Time
+df['Period'] = pd.to_datetime(df['Period'], errors='coerce')  # Convert to datetime
+df_sorted = df.sort_values(by='Period')
+plt.figure(figsize=(12, 6))
+plt.plot(df_sorted['Period'], df_sorted['Data_value'])
+plt.title('Line Chart - Data Value over Time')
+plt.xlabel('Period')
+plt.ylabel('Data Value')
+plt.xticks(rotation=45)
+plt.tight_layout()
+plt.show()
+
+# -------------------------------
+# Bar Plot - Data by Severity
+plt.figure(figsize=(8, 6))
+sns.barplot(x='Severity', y='Data_value', data=df)
+plt.title('Bar Plot - Data Value by Severity')
+plt.show()
+
+# -------------------------------
+# Column Chart - Top 10 Causes
+plt.figure(figsize=(10, 6))
+top_causes = df.groupby('Cause')['Data_value'].mean().sort_values(ascending=False).head(10)
+top_causes.plot(kind='bar', color='skyblue')
+plt.title('Top 10 Causes by Average Data Value')
+plt.ylabel('Average Data Value')
+plt.xticks(rotation=45)
+plt.tight_layout()
+plt.show()
+
+# -------------------------------
+# Scatter Plot - CI bounds
+plt.figure(figsize=(8, 6))
+sns.scatterplot(data=df, x='Lower_CI', y='Upper_CI', hue='Severity')
+plt.title('Scatter Plot - Confidence Intervals by Severity')
+plt.show()
+
+# -------------------------------
+# Pair Plot of Numeric Columns
+sns.pairplot(df[numeric_cols])
+plt.suptitle('Pair Plot of Numeric Variables', y=1.02)
+plt.show()
+
+# Info about the dataset
+print("Dataset Info:")
+print(df.info())
+print("\nFirst 5 Rows:")
+print(df.head())
+
+# Check for missing values
+print("\nMissing Values:\n", df.isnull().sum())
+
+# -------------------------------
+# Statistical Summary
+numeric_cols = ['Data_value', 'Lower_CI', 'Upper_CI']
+print("\nStatistical Summary:\n", df[numeric_cols].describe())
+
+# -------------------------------
+# Outlier Detection using Z-Score
+z_scores = np.abs(zscore(df[numeric_cols]))
+outliers = (z_scores > 3)
+print("\nOutliers (Z-Score > 3):\n", outliers.sum())
+
+# -------------------------------
+# Correlation Heatmap
+plt.figure(figsize=(8, 6))
+sns.heatmap(df[numeric_cols].corr(), annot=True, cmap='coolwarm')
+plt.title('Correlation Heatmap')
+plt.show()
+
+# -------------------------------
+# Boxplot for Outliers
+plt.figure(figsize=(8, 6))
+sns.boxplot(data=df[numeric_cols])
+plt.title('Boxplot - Outliers')
+plt.show()
+
+# -------------------------------
+# Line Chart of Data over Time
+df['Period'] = pd.to_datetime(df['Period'], errors='coerce')  # Convert to datetime
+df_sorted = df.sort_values(by='Period')
+plt.figure(figsize=(12, 6))
+plt.plot(df_sorted['Period'], df_sorted['Data_value'])
+plt.title('Line Chart - Data Value over Time')
+plt.xlabel('Period')
+plt.ylabel('Data Value')
+plt.xticks(rotation=45)
+plt.tight_layout()
+plt.show()
+
+# -------------------------------
+# Bar Plot - Data by Severity
+plt.figure(figsize=(8, 6))
+sns.barplot(x='Severity', y='Data_value', data=df)
+plt.title('Bar Plot - Data Value by Severity')
+plt.show()
+
+# -------------------------------
+# Column Chart - Top 10 Causes
+plt.figure(figsize=(10, 6))
+top_causes = df.groupby('Cause')['Data_value'].mean().sort_values(ascending=False).head(10)
+top_causes.plot(kind='bar', color='skyblue')
+plt.title('Top 10 Causes by Average Data Value')
+plt.ylabel('Average Data Value')
+plt.xticks(rotation=45)
+plt.tight_layout()
+plt.show()
+
+# -------------------------------
+# Scatter Plot - CI bounds
+plt.figure(figsize=(8, 6))
+sns.scatterplot(data=df, x='Lower_CI', y='Upper_CI', hue='Severity')
+plt.title('Scatter Plot - Confidence Intervals by Severity')
+plt.show()
+
+# -------------------------------
+# Pair Plot of Numeric Columns
+sns.pairplot(df[numeric_cols])
+plt.suptitle('Pair Plot of Numeric Variables', y=1.02)
+plt.show()
